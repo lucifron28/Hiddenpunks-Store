@@ -1,3 +1,6 @@
+let carouselItems = [];
+let currentIndex = 0;
+
 document.addEventListener('DOMContentLoaded', () => {
     if (window.location.pathname.endsWith('products.html')) {
         prefetchAllProducts();
@@ -5,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.location.pathname.endsWith('cart.html')) {
         initializeCart();
     }
-    fetchFeaturedProducts(); // Fetch and initialize the carousel on page load
+    fetchCarouselItems(); // Fetch and initialize the carousel on page load
 });
 
 function prefetchAllProducts() {
@@ -16,6 +19,68 @@ function prefetchAllProducts() {
             localStorage.setItem('products_all', JSON.stringify(products)); // Store all products in local storage
             displayProducts(products);
         });
+}
+
+function fetchCarouselItems() {
+    if (carouselItems.length === 0) {
+        fetch('https://fakestoreapi.com/products?limit=3') // Use a valid URL
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                carouselItems = data.map(item => ({
+                    image: item.image,
+                    alt: item.title
+                }));
+                displayCarouselItem(currentIndex);
+                setInterval(nextCarouselItem, 5000); // Start automatic sliding
+            })
+            .catch(error => console.error('Error fetching carousel items:', error));
+    } else {
+        displayCarouselItem(currentIndex);
+        setInterval(nextCarouselItem, 5000); // Start automatic sliding
+    }
+}
+
+function displayCarouselItem(index) {
+    const carousel = document.getElementById('carousel');
+    if (!carousel) return; // Ensure the carousel element exists
+
+    carousel.innerHTML = ''; // Clear existing items
+
+    const item = carouselItems[index];
+    const img = document.createElement('img');
+    img.src = item.image;
+    img.alt = item.alt;
+    img.classList.add('active');
+    carousel.appendChild(img);
+
+    // Add carousel buttons if not already present
+    if (!document.getElementById('carousel-buttons')) {
+        const buttons = document.createElement('div');
+        buttons.id = 'carousel-buttons';
+        buttons.innerHTML = `
+            <button id="carousel-button-prev">&#10094;</button>
+            <button id="carousel-button-next">&#10095;</button>
+        `;
+        carousel.appendChild(buttons);
+
+        document.getElementById('carousel-button-next').addEventListener('click', nextCarouselItem);
+        document.getElementById('carousel-button-prev').addEventListener('click', prevCarouselItem);
+    }
+}
+
+function nextCarouselItem() {
+    currentIndex = (currentIndex + 1) % carouselItems.length;
+    displayCarouselItem(currentIndex);
+}
+
+function prevCarouselItem() {
+    currentIndex = (currentIndex - 1 + carouselItems.length) % carouselItems.length;
+    displayCarouselItem(currentIndex);
 }
 
 function fetchFeaturedProducts() {
@@ -124,7 +189,9 @@ function initializeCart() {
     displayCartItems();
 
     document.getElementById('checkout').addEventListener('click', () => {
-        alert('Checkout functionality not implemented yet.');
+        alert('Purchase successful.');
+        localStorage.removeItem('cart');
+        displayCartItems();
     });
 }
 
@@ -148,6 +215,8 @@ function hideModal(modal) {
 
 function initializeCarousel(products) {
     const carouselContainer = document.getElementById('carousel');
+    if (!carouselContainer) return; // Ensure the carousel element exists
+
     carouselContainer.innerHTML = ''; // Clear existing carousel content
 
     products.forEach((product, index) => {
@@ -192,4 +261,12 @@ function initializeCarousel(products) {
 
     // Automatically slide every 5 seconds
     setInterval(nextSlide, 5000);
+}
+
+// Add event listeners for carousel buttons if they exist
+const nextButton = document.getElementById('carousel-button-next');
+const prevButton = document.getElementById('carousel-button-prev');
+if (nextButton && prevButton) {
+    nextButton.addEventListener('click', nextCarouselItem);
+    prevButton.addEventListener('click', prevCarouselItem);
 }

@@ -2,7 +2,21 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    height: 100vh; /* Ensure body takes full viewport height */
 }
+
+body.background {
+    background-image: url('images/body-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh; /* Ensure background covers full viewport height */
+}
+
+/*
+#######################################################################################################
+    Index.html Section Styles
+#######################################################################################################
+*/
 
 .hero {
     display: flex;
@@ -20,9 +34,9 @@ body {
 .hero .hero-text {
     width: 45%;
     padding: 20px;
-    background-color: rgba(0, 0, 0, 0.5); /* Add a semi-transparent background */
+    background-color: rgba(0, 0, 0, 0.5);
     border-radius: 10px;
-    color: white; /* Ensure text is readable */
+    color: white;
 }
 
 .hero h1 {
@@ -53,6 +67,12 @@ body {
     background-color: #0056b3;
 }
 
+/*
+#######################################################################################################
+    Index.html carousel styles
+#######################################################################################################
+*/
+
 #carousel {
     width: 500px;
     height: 500px;
@@ -66,16 +86,15 @@ body {
 #carousel img {
     width: 100%;
     height: 100%;
-    display: none; /* Hide all images initially */
+    display: none;
     position: absolute;
     top: 0;
     left: 0;
     opacity: 0;
-    transition: opacity 1s ease-in-out; /* Add transition for opacity */
+    transition: opacity 1s ease-in-out;
 }
-
 #carousel img.active {
-    display: block; /* Show the active image */
+    display: block;
     animation: fadeIn 1s forwards;
 }
 
@@ -94,48 +113,54 @@ body {
 
 #carousel-button-prev,
 #carousel-button-next {
-    background-color: rgba(255, 255, 255, 0.5); /* White semi-transparent background */
-    border: 2px solid black; /* Black border */
-    color: black; /* Black text color */
+    background-color: rgba(255, 255, 255, 0.5);
+    border: 2px solid black;
+    color: black;
     padding: 10px;
     cursor: pointer;
-    font-size: 18px; /* Ensure the button text is visible */
-    border-radius: 50%; /* Make the button circular */
+    font-size: 18px;
+    border-radius: 50%;
     width: 50px;
 }
 
 #carousel-button-prev:hover,
 #carousel-button-next:hover {
-    background-color: rgba(255, 255, 255, 0.7); /* Lighten the button on hover */
+    background-color: rgba(255, 255, 255, 0.7);
 }
+/*
+#######################################################################################################
+    products.html styles
+#######################################################################################################
+*/
 
 .products {
     margin: 0 auto;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 5px; /* Reduced gap */
+    gap: 5px;
     padding: 20px;
-    width: fit-content; /* Ensure the container width fits its content */
+    width: fit-content;
 }
 
 .product-card {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center; /* Center items horizontally */
+    align-items: center;
     border: 1px solid #ddd;
     border-radius: 5px;
     margin: 0px;
     padding: 20px;
     text-align: center;
     width: 300px;
-    transition: transform 0.3s ease; /* Smooth transition for the scale effect */
-    background-color: rgba(55, 149, 193, 0.4);
+    transition: transform 0.3s ease;
+    background-color: rgba(55, 149, 193, 0.1);
 }
 
 .product-card:hover {
-    transform: scale(1.05); /* Scale up the card slightly on hover */
+    transform: scale(1.05); 
     cursor: pointer;
+    background-color: rgba(55, 149, 193, 0.5);
 }
 
 .product-card img {
@@ -167,10 +192,13 @@ nav {
     align-items: center;
     background-color: powderblue;
     padding: 10px 10px;
+    background-image: url('images/header.png');
+    height: 100px;
+    background-size: contain;
 }
 
 .nav-title {
-    flex: 1; /* Take up remaining space to push the ul to the center */
+    flex: 1;
     font-weight: bold;
     cursor: pointer;
     font-size: 1.5em;
@@ -187,9 +215,9 @@ nav ul {
     list-style: none;
     padding: 0;
     margin: 0;
-    justify-content: center; /* Center the category links horizontally */
-    align-items: center; /* Center the category links vertically */
-    flex: 2; /* Take up space to center the links */
+    justify-content: center; 
+    align-items: center;
+    flex: 2; 
 }
 
 nav ul li {
@@ -197,7 +225,7 @@ nav ul li {
 }
 
 nav ul li.cart-button {
-    margin-left: auto; /* Push the cart button to the right */
+    margin-left: auto;
 }
 
 nav ul li a {
@@ -216,12 +244,12 @@ nav ul li a:hover {
 .cart-button {
     display: flex;
     align-items: center;
-    margin-left: auto; /* Move cart button to the right */
+    margin-left: auto;
 }
 
 .cart-button img {
-    width: 30px;
-    height: 30px;
+    width: 50px;
+    height: 50px;
 }
 
 .modal {
@@ -241,19 +269,8 @@ nav ul li a:hover {
 }
 
 .modal-content {
-    position: relative; /* Ensure the modal content is relatively positioned */
-    background-color: #fefefe;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 500px;
-    text-align: center;
-}
-
-.modal-content {
-    position: relative; /* Ensure the modal content is relatively positioned */
-    background-color: #fefefe;
+    position: relative;
+    background-color: powderblue;
     margin: auto;
     padding: 20px;
     border: 1px solid #888;
@@ -262,8 +279,10 @@ nav ul li a:hover {
     text-align: center;
     display: flex;
     flex-direction: column;
-    align-items: center; /* Center items horizontally */
-}.modal {
+    align-items: center;
+}
+
+.modal {
     display: none;
     justify-content: center;
     align-items: center;
@@ -277,18 +296,6 @@ nav ul li a:hover {
     background-color: rgba(0, 0, 0, 0.5);
 }
 
-.modal-content {
-    background-color: #fefefe;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 500px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
 
 .close {
     color: #aaa;
@@ -302,15 +309,6 @@ nav ul li a:hover {
     max-width: 100%;
     height: 300px;
     object-fit: cover;
-}
-
-
-.background {
-    background-image: url('images/background.webp');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    min-height: 100vh;
 }
 
 .cart-items {
@@ -327,31 +325,31 @@ nav ul li a:hover {
     padding: 8px;
     border-bottom: 1px solid #e2e8f0;
     background-color: #fff;
-    width: 800px; /* Increase the max-width */
+    width: 800px;
     margin: 0 auto;
-    flex-direction: row; /* Ensure items are in a row */
+    flex-direction: row;
 }
 
 .cart-item img {
-    width: 50px; /* Smaller image */
+    width: 50px; 
     height: 50px;
     object-fit: cover;
-    margin-right: 10px; /* Add some space between image and text */
+    margin-right: 10px;
 }
 
 .cart-item h3 {
-    flex: 1; /* Take up remaining space */
-    margin: 0 10px; /* Add some space around the text */
-    text-align: left; /* Align text to the left */
+    flex: 1; 
+    margin: 0 10px; 
+    text-align: left; 
 }
 
 .cart-item p {
-    margin: 0 10px; /* Add some space around the text */
-    text-align: left; /* Align text to the left */
+    margin: 0 10px;
+    text-align: left;
 }
 
 .cart-item .remove-button {
-    margin-left: 10px; /* Add some space between text and button */
+    margin-left: 10px;
 }
 
 .cart-item img {
