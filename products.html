@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Products</title>
+</head>
+<body class="background">
+    <nav>
+        <div class="nav-title"><a href="index.html">Hiddenpunks Store</a></div>
+        <ul>
+            <li><a href="#" onclick="filterProducts('all')">All</a></li>
+            <li><a href="#" onclick="filterProducts('electronics')">Electronics</a></li>
+            <li><a href="#" onclick="filterProducts('jewelery')">Jewelery</a></li>
+            <li><a href="#" onclick="filterProducts('men\'s clothing')">Men's Clothing</a></li>
+            <li><a href="#" onclick="filterProducts('women\'s clothing')">Women's Clothing</a></li>
+            <li class="cart-button"><a href="cart.html"><img src="images/cart.png" alt="Cart"></a></li>
+        </ul>
+    </nav>
+    <div class="products"></div>
+    <div id="product-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <img id="modal-image" src="" alt="Product Image">
+            <h2 id="modal-title"></h2>
+            <p id="modal-description"></p>
+            <p id="modal-price"></p>
+            <button id="add-to-cart">Add to Cart</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
