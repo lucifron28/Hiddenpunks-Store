@@ -22,26 +22,16 @@ function prefetchAllProducts() {
 }
 
 function fetchCarouselItems() {
-    if (carouselItems.length === 0) {
-        fetch('https://fakestoreapi.com/products?limit=3') // Use a valid URL
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                carouselItems = data.map(item => ({
-                    image: item.image,
-                    alt: item.title
-                }));
-                displayCarouselItem(currentIndex);
-                setInterval(nextCarouselItem, 5000); // Start automatic sliding
-            })
-            .catch(error => console.error('Error fetching carousel items:', error));
-    } else {
+    const storedProducts = JSON.parse(localStorage.getItem('products_all')) || [];
+    if (storedProducts.length > 0) {
+        carouselItems = storedProducts.slice(0, 3).map(item => ({
+            image: item.image,
+            alt: item.title
+        }));
         displayCarouselItem(currentIndex);
         setInterval(nextCarouselItem, 5000); // Start automatic sliding
+    } else {
+        console.error('No products found in local storage.');
     }
 }
 
@@ -130,7 +120,6 @@ function addToCart(product) {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     cart.push(product);
     localStorage.setItem('cart', JSON.stringify(cart));
-    alert('Product added to cart');
 }
 
 function closeModal() {
@@ -153,17 +142,24 @@ function displayCartItems() {
     const cartItemsContainer = document.querySelector('.cart-items');
     cartItemsContainer.innerHTML = ''; // Clear the container before displaying items
 
-    cart.forEach((product, index) => {
-        const cartItem = document.createElement('div');
-        cartItem.classList.add('cart-item');
-        cartItem.innerHTML = `
-            <img src="${product.image}" alt="${product.title}">
-            <h3>${product.title}</h3>
-            <p>$${product.price}</p>
-            <button class="remove-button" onclick="removeFromCart(${index})">Remove</button>
-        `;
-        cartItemsContainer.appendChild(cartItem);
-    });
+    if (cart.length === 0) {
+        const emptyMessage = document.createElement('p');
+        emptyMessage.classList.add('empty-cart-message');
+        emptyMessage.innerHTML = 'Your cart is empty <a href="products.html">Go Shopping</a>'; // Use innerHTML instead of innerText
+        cartItemsContainer.appendChild(emptyMessage);
+    } else {
+        cart.forEach((product, index) => {
+            const cartItem = document.createElement('div');
+            cartItem.classList.add('cart-item');
+            cartItem.innerHTML = `
+                <img src="${product.image}" alt="${product.title}">
+                <h3>${product.title}</h3>
+                <p>$${product.price}</p>
+                <button class="remove-button" onclick="removeFromCart(${index})">Remove</button>
+            `;
+            cartItemsContainer.appendChild(cartItem);
+        });
+    }
     updateTotalPrice(cart);
 }
 
