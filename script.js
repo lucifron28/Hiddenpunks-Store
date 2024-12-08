@@ -1,3 +1,4 @@
+// mag initialize variables para ma track ang item rotation sa carousel
 let carouselItems = [];
 let currentIndex = 0;
 
@@ -11,35 +12,40 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchCarouselItems(); // Fetch and initialize the carousel on page load
 });
 
+// function para ma-fetch ng lahat ng products at i-save sa local storage
+// upang hindi paulit-ulit mag fetch at para mabilis ang pag load ng products
 function prefetchAllProducts() {
     let url = 'https://fakestoreapi.com/products';
     fetch(url)
         .then(response => response.json())
         .then(products => {
-            localStorage.setItem('products_all', JSON.stringify(products)); // Store all products in local storage
+            localStorage.setItem('products_all', JSON.stringify(products)); // save ang na fetch na products sa local storage
             displayProducts(products);
         });
 }
 
+// function para mag fetch ng carousel items
 function fetchCarouselItems() {
     const storedProducts = JSON.parse(localStorage.getItem('products_all')) || [];
     if (storedProducts.length > 0) {
-        carouselItems = storedProducts.slice(0, 3).map(item => ({
+        // i shuffle yung products para mag iba-iba yung items sa carousel
+        storedProducts.sort(() => Math.random() - 0.5);
+        carouselItems = storedProducts.slice(0, 15).map(item => ({
             image: item.image,
             alt: item.title
         }));
         displayCarouselItem(currentIndex);
-        setInterval(nextCarouselItem, 5000); // Start automatic sliding
+        setInterval(nextCarouselItem, 5000); // mag auto slide yung carousel every 5 seconds
     } else {
         console.error('No products found in local storage.');
     }
 }
-
+// function para mag display ng carousel item
 function displayCarouselItem(index) {
     const carousel = document.getElementById('carousel');
-    if (!carousel) return; // Ensure the carousel element exists
+    if (!carousel) return; 
 
-    carousel.innerHTML = ''; // Clear existing items
+    carousel.innerHTML = '';
 
     const item = carouselItems[index];
     const img = document.createElement('img');
@@ -48,7 +54,7 @@ function displayCarouselItem(index) {
     img.classList.add('active');
     carousel.appendChild(img);
 
-    // Add carousel buttons if not already present
+    // mag add ng buttons sa carousel kung wala pa
     if (!document.getElementById('carousel-buttons')) {
         const buttons = document.createElement('div');
         buttons.id = 'carousel-buttons';
@@ -62,17 +68,18 @@ function displayCarouselItem(index) {
         document.getElementById('carousel-button-prev').addEventListener('click', prevCarouselItem);
     }
 }
-
+// function para mag slide sa next item sa carousel
 function nextCarouselItem() {
     currentIndex = (currentIndex + 1) % carouselItems.length;
     displayCarouselItem(currentIndex);
 }
-
+// function para mag slide sa previous item sa carousel
 function prevCarouselItem() {
     currentIndex = (currentIndex - 1 + carouselItems.length) % carouselItems.length;
     displayCarouselItem(currentIndex);
 }
 
+// function para mag fetch ng featured products 
 function fetchFeaturedProducts() {
     let url = 'https://fakestoreapi.com/products?limit=3'; // Fetch only 3 products for the carousel
     fetch(url)
@@ -83,6 +90,7 @@ function fetchFeaturedProducts() {
         });
 }
 
+// function para mag display ng products na galing sa local storage
 function displayProducts(products) {
     const productsContainer = document.querySelector('.products');
     productsContainer.innerHTML = ''; // Clear previous products
@@ -99,6 +107,7 @@ function displayProducts(products) {
     });
 }
 
+// function para mag show ng modal ng product
 function showProductModal(productId) {
     const products = JSON.parse(localStorage.getItem('products_all')) || [];
     const product = products.find(p => p.id === productId);
@@ -116,17 +125,20 @@ function showProductModal(productId) {
     }
 }
 
+// function para mag add ng product sa cart
 function addToCart(product) {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     cart.push(product);
     localStorage.setItem('cart', JSON.stringify(cart));
 }
 
+// function para mag close ng modal
 function closeModal() {
     const modal = document.getElementById('product-modal');
     hideModal(modal);
 }
 
+// function para mag filter ng products base sa category
 function filterProducts(category) {
     const products = JSON.parse(localStorage.getItem('products_all')) || [];
     if (category === 'all') {
@@ -137,6 +149,7 @@ function filterProducts(category) {
     }
 }
 
+// function para mag display ng items sa cart na na-save sa local storage
 function displayCartItems() {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     const cartItemsContainer = document.querySelector('.cart-items');
@@ -163,6 +176,7 @@ function displayCartItems() {
     updateTotalPrice(cart);
 }
 
+// function para mag remove ng item sa cart
 function removeFromCart(index) {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     const cartItemsContainer = document.querySelector('.cart-items');
@@ -172,7 +186,7 @@ function removeFromCart(index) {
         cart.splice(index, 1);
         localStorage.setItem('cart', JSON.stringify(cart));
         displayCartItems();
-    }, 500); // Match the duration of the slideOut animation
+    }, 500); // delay para mag match sa delete animation ng cart item
 }
 
 function updateTotalPrice(products) {
@@ -180,7 +194,7 @@ function updateTotalPrice(products) {
     document.getElementById('total-price').innerText = `Total: $${totalPrice.toFixed(2)}`;
 }
 
-// Cart functionality
+// function para sa functionality ng cart
 function initializeCart() {
     displayCartItems();
 
@@ -191,7 +205,7 @@ function initializeCart() {
     });
 }
 
-// Modal functions
+// Mga function para mag lumabas at ma-tago yung modal
 function showModal(modal) {
     modal.style.display = 'flex';
     modal.style.opacity = '0';
@@ -209,60 +223,3 @@ function hideModal(modal) {
     }, 300);
 }
 
-function initializeCarousel(products) {
-    const carouselContainer = document.getElementById('carousel');
-    if (!carouselContainer) return; // Ensure the carousel element exists
-
-    carouselContainer.innerHTML = ''; // Clear existing carousel content
-
-    products.forEach((product, index) => {
-        const img = document.createElement('img');
-        img.src = product.image;
-        img.alt = product.title;
-        img.classList.add(index === 0 ? 'active' : 'inactive'); // Show the first image, hide others
-        carouselContainer.appendChild(img);
-    });
-
-    const buttons = document.createElement('div');
-    buttons.id = 'carousel-buttons';
-    buttons.innerHTML = `
-        <button id="carousel-button-prev">&#10094;</button>
-        <button id="carousel-button-next">&#10095;</button>
-    `;
-    carouselContainer.appendChild(buttons);
-
-    let currentSlide = 0;
-    const slides = carouselContainer.querySelectorAll('img');
-
-    function showSlide(index) {
-        slides[currentSlide].classList.remove('active');
-        slides[currentSlide].classList.add('inactive');
-        slides[index].classList.remove('inactive');
-        slides[index].classList.add('active');
-        currentSlide = index;
-    }
-
-    function nextSlide() {
-        const nextIndex = (currentSlide + 1) % slides.length;
-        showSlide(nextIndex);
-    }
-
-    function prevSlide() {
-        const prevIndex = (currentSlide - 1 + slides.length) % slides.length;
-        showSlide(prevIndex);
-    }
-
-    document.getElementById('carousel-button-next').addEventListener('click', nextSlide);
-    document.getElementById('carousel-button-prev').addEventListener('click', prevSlide);
-
-    // Automatically slide every 5 seconds
-    setInterval(nextSlide, 5000);
-}
-
-// Add event listeners for carousel buttons if they exist
-const nextButton = document.getElementById('carousel-button-next');
-const prevButton = document.getElementById('carousel-button-prev');
-if (nextButton && prevButton) {
-    nextButton.addEventListener('click', nextCarouselItem);
-    prevButton.addEventListener('click', prevCarouselItem);
-}

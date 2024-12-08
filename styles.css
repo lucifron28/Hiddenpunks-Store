@@ -2,14 +2,14 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    height: 100vh; /* Ensure body takes full viewport height */
+    height: 100vh;
 }
 
 body.background {
     background-image: url('images/body-bg.jpg');
     background-size: cover;
     background-position: center;
-    min-height: 100vh; /* Ensure background covers full viewport height */
+    min-height: 100vh;
 }
 
 /*
@@ -127,6 +127,7 @@ body.background {
 #carousel-button-next:hover {
     background-color: rgba(255, 255, 255, 0.7);
 }
+
 /*
 #######################################################################################################
     products.html styles
@@ -208,7 +209,6 @@ nav {
     text-decoration: none;
     color: #333;
 }
-
 
 nav ul {
     display: flex;
@@ -295,7 +295,6 @@ nav ul li a:hover {
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.5);
 }
-
 
 .close {
     color: #aaa;
@@ -438,6 +437,12 @@ nav ul li a:hover {
         opacity: 0;
     }
 }
+
+/*
+#######################################################################################################
+    Footer styles
+#######################################################################################################
+*/
 
 footer {
     background-color: #f4f4f441;
